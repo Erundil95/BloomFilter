@@ -1,5 +1,6 @@
 from Bio import SeqIO
 import math
+import mmh3
 from bitarray import bitarray
 
 class BloomFilter(object):
@@ -12,7 +13,11 @@ class BloomFilter(object):
             n : int
                 number of items to insert in the filter
             k : int
-                number of hash functions to use'''
+                number of hash functions to use
+            size : int
+                size of bit array calcualted from p and n
+            bitArray : bitarray
+                Hash bit array set to 0 '''
 
         self.p = 0.5
         self.n = len(input)
@@ -32,9 +37,14 @@ class BloomFilter(object):
         '''adds an item to the bloom filter'''
 
         k_range = range(self.k)
-        A = []
 
-        for h in k_range:
+        for i in k_range:
+            # calculate K different hashes for item,
+            # % by size to fit into bitarray
+            
+            h = mmh3.hash(item, i) % self.size
+            self.bitArray[h] = True
+
 
     def checkitem(self, item):
         '''checks if an item is present in the bloom filter'''
