@@ -24,6 +24,8 @@ class BloomFilter(object):
                 Hash bit array set to 0 '''
 
         self.kmer = utils.splice(input, k)
+        #removing possible duplicates
+        self.kmer = list(dict.fromkeys(self.kmer))
 
         self.k = k
         self.p = 0.01
